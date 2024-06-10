@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THRILLOPHILIA</title>
+<style>
+body {
+  font-family: "Lato", sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 16px;
+}
+
+.sidebar a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+}
+
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  margin-left: 160px; /* Same as the width of the sidebar */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}
+
+#loginIcon {
+  position: fixed;
+  top: 30px;
+  right: 20px;
+  cursor: pointer;
+}
+
+.wrapper {
+  overflow: hidden;
+  max-width: 240px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+  position: fixed;
+  top: 150px; /* Adjust as needed */
+  right: 10px;
+}
+
+.title-text {
+  display: flex;
+  width: 200%;
+}
+
+.title {
+  width: 50%;
+  font-size: 15px;
+  font-weight: 600;
+  text-align: center;
+  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+
+.slide-controls {
+  position: relative;
+  display: flex;
+  height: 50px;
+  width: 96%;
+  overflow: hidden;
+  margin: 30px 0 10px 0;
+  justify-content: space-between;
+  border: 1px solid lightgrey;
+  border-radius: 15px;
+}
+
+.slide-controls .slide {
+  height: 100%;
+  width: 96%;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 48px;
+  cursor: pointer;
+  z-index: 1;
+  transition: all 0.6s ease;
+}
+
+.slide-controls label.signup {
+  color: #000;
+}
+
+.slide-controls .slider-tab {
+  position: absolute;
+  height: 100%;
+  width: 50%;
+  left: 0;
+  z-index: 0;
+  border-radius: 15px;
+  background: -webkit-linear-gradient(left,#003366,#004080,#0059b3, #0073e6);
+  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+#signup:checked ~ .slider-tab {
+  left: 50%;
+}
+
+#signup:checked ~ label.signup {
+  color: #fff;
+  cursor: default;
+  user-select: none;
+}
+
+#signup:checked ~ label.login {
+  color: #000;
+}
+
+#login:checked ~ label.signup {
+  color: #000;
+}
+
+#login:checked ~ label.login {
+  cursor: default;
+  user-select: none;
+}
+
+.form-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.form-container .form-inner {
+  display: flex;
+  width: 200%;
+}
+
+.form-container .form-inner form {
+  width: 50%;
+  transition: all 0.6s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+
+.form-inner form .field {
+  height: 50px;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.form-inner form .field input {
+  height: 100%;
+  width: 90%;
+  outline: none;
+  padding-left: 15px;
+  border-radius: 15px;
+  border: 1px solid lightgrey;
+  border-bottom-width: 2px;
+  font-size: 17px;
+  transition: all 0.3s ease;
+}
+
+.form-inner form .field input:focus {
+  border-color: #1a75ff;
+}
+
+.form-inner form .field input::placeholder {
+  color: #999;
+  transition: all 0.3s ease;
+}
+
+form .field input:focus::placeholder {
+  color: #1a75ff;
+}
+
+.form-inner form .pass-link {
+  margin-top: 5px;
+}
+
+.form-inner form .signup-link {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.form-inner form .pass-link a,
+.form-inner form .signup-link a {
+  color: #1a75ff;
+  text-decoration: none;
+}
+
+.form-inner form .pass-link a:hover,
+.form-inner form .signup-link a:hover {
+  text-decoration: underline;
+}
+
+form .btn {
+  height: 50px;
+  width: 100%;
+  border-radius: 15px;
+  position: relative;
+  overflow: hidden;
+}
+
+form .btn .btn-layer {
+  height: 100%;
+  width: 300%;
+  position: absolute;
+  left: -100%;
+  background: -webkit-linear-gradient(right,#003366,#004080,#0059b3, #0073e6);
+  border-radius: 15px;
+  transition: all 0.4s ease;
+}
+
+form .btn:hover .btn-layer {
+  left: 0;
+}
+
+form .btn input[type="submit"] {
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  position: relative;
+  background: none;
+  border: none;
+  color: #fff;
+  padding-left: 0;
+  border-radius: 15px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+</style>
+</head>
+<body style="background-image: url('background.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;">
+<h1 align="center" style="font-family: Copperplate, Papyrus, fantasy;"><b>THRILLOPHILIA</b></h1>
+<marquee bgcolor="Lavender" direction="left"><p style="color:Charcoal">SEASONAL SPECIALS:LAMBASINGI,MANALI</p></marquee>
+<div class="sidebar">
+  <a href="#home"> Home</a>
+  <a href="facilities.html">Facilities</a>
+  <a href="resorts.html">Resorts</a>
+  <a href="booking.html">Booking</a>
+  <a href="contact.html">Contact</a>
+</div>
+
+<div class="main">
+<a href="https://en.wikipedia.org/wiki/Gangtok"><img src="https://www.esikkimtourism.in/wp-content/uploads/2019/04/plcstovsrtaugst.jpg" width=500 height=250></a>
+<a href="https://en.wikipedia.org/wiki/Darjeeling"><img src="https://vigneshwartours.com/wp-content/uploads/2023/03/1645070582_9_2.jpg" width=500 height=250></a>
+<a href="https://en.wikipedia.org/wiki/shillong"><img src="https://chaloghumane.com/wp-content/uploads/2021/02/Shillong-1400x800.jpg" width=500 height=250></a>
+<a href="https://en.wikipedia.org/wiki/ooty"><img src="https://static.wixstatic.com/media/012323_7be29c92ca6d459b95df381c072f09d5~mv2.jpg/v1/fill/w_1000,h_563,al_c,q_85,usm_0.66_1.00_0.01/012323_7be29c92ca6d459b95df381c072f09d5~mv2.jpg" width=500 height=250></a>
+<a href="https://en.wikipedia.org/wiki/lambasingi"><img src="https://i.pinimg.com/originals/d6/e3/4d/d6e34d6f61436f3bd247df45078e665f.jpg" width=500 height=250></a>
+<a href="https://en.wikipedia.org/wiki/Manali,_Himachal_Pradesh"><img src="https://i.ytimg.com/vi/_egW2qODYHY/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA3XlE6-3GSkVdpmyHQnIPjQrC3iAhttps://i.ytimg.com/vi/_egW2qODYHY/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLA3XlE6-3GSkVdpmyHQnIPjQrC3iA.jpg" width=500 height=250></a>
+<a href="https://en.wikipedia.org/wiki/Munnar"><img src="https://www.hillsandwills.com/blog_images/89554.jpg" width=500 height=250></a>
+<a href="https://en.wikipedia.org/wiki/Koorg"><img src="https://dmgupcwbwy0wl.cloudfront.net/system/images/000/390/931/4f85dafa616b827f9087f41a77fb7f1a/original/Coorg.jpg?1594097073.jpg" width=500 height=250></a>
+</div>
+
+<!-- Sign In / Sign Up Form -->
+<div class="wrapper">
+  <div class="title-text">
+    <div class="title login">THRILLOPHILIA</div>
+    <div class="title signup">THRILLOPHILIA</div>
+  </div>
+  <div class="form-container">
+    <div class="slide-controls">
+      <input type="radio" name="slide" id="login" checked>
+      <input type="radio" name="slide" id="signup">
+      <label for="login" class="slide login">Login</label>
+      <label for="signup" class="slide signup">Signup</label>
+      <div class="slider-tab"></div>
+    </div>
+    <div class="form-inner">
+      <form action="#" class="login" id="loginForm" onsubmit="return validateLogin()">
+        <div class="field">
+          <input type="email" placeholder="Email Address" id="loginEmail" required>
+        </div>
+        <div class="field">
+          <input type="password" placeholder="Password" id="loginPassword" required>
+        </div>
+        <div class="pass-link"><a href="#">Forgot password?</a></div>
+        <div class="field btn">
+          <div class="btn-layer"></div>
+          <input type="submit" value="Login">
+        </div>
+        <div class="signup-link">Not a member? <a href="">Signup now</a></div>
+      </form>
+      <form action="#" class="signup" id="signupForm">
+        <div class="field">
+          <input type="email" placeholder="Email Address" id="signupEmail" required>
+        </div>
+        <div class="field">
+          <input type="password" placeholder="Password" id="signupPassword" required>
+        </div>
+        <div class="field">
+          <input type="password" placeholder="Confirm password" id="cpassword" required>
+          <span id="passwordError" class="error"></span>
+        </div>
+        <div class="field btn">
+          <div class="btn-layer"></div>
+          <input type="submit" value="Signup">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Login Icon -->
+<img id="loginIcon" src="https://thumbs.dreamstime.com/b/sign-up-member-icon-elegant-cyan-blue-round-button-sign-up-member-icon-isolated-elegant-cyan-blue-round-button-abstract-99714643.jpg" alt="Login Icon" width="50" height="50">
+
+<script>
+document.getElementById("loginIcon").addEventListener("click", function() {
+  // Toggle visibility of the sign-in/sign-up form
+  var formWrapper = document.querySelector(".wrapper");
+  formWrapper.style.display = formWrapper.style.display === "none" ? "block" : "none";
+});
+ const loginText = document.querySelector(".title-text .login");
+      const loginForm = document.querySelector("form.login");
+      const loginBtn = document.querySelector("label.login");
+      const signupBtn = document.querySelector("label.signup");
+      const signupLink = document.querySelector("form .signup-link a");
+      signupBtn.onclick = (()=>{
+        loginForm.style.marginLeft = "-50%";
+        loginText.style.marginLeft = "-50%";
+      });
+      loginBtn.onclick = (()=>{
+        loginForm.style.marginLeft = "0%";
+        loginText.style.marginLeft = "0%";
+      });
+      signupLink.onclick = (()=>{
+        signupBtn.click();
+        return false;
+      });
+
+function validateLogin() {
+    var username = document.getElementById("loginEmail").value;
+    var password = document.getElementById("loginPassword").value;
+
+    // Predefined username and password
+    var correctUsername = "rajesh@gmail.com";
+    var correctPassword = "123";
+
+    // Check if the entered username and password match the predefined values
+    if (username === correctUsername && password === correctPassword) {
+
+        // Hide the slider
+        var formWrapper = document.querySelector(".wrapper");
+        formWrapper.style.display = "none";
+        return false;
+    } else {
+        // Show alert for incorrect login details
+        alert("Incorrect username or password. Please try again.");
+        return false;
+    }
+}
+</script>
+
+</body>
+</html>

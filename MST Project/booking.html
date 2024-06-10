@@ -1,0 +1,212 @@
+<html>
+<head>
+<title>Booking</title>
+<style>
+body {font-family: "Lato", sans-serif;}
+
+.sidebar {
+  height: 100%;
+  width: 160px;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 16px;
+}
+
+.sidebar a {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 20px;
+  color: #818181;
+  display: block;
+}
+
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+
+.main {
+  margin-left: 160px; /* Same as the width of the sidenav */
+  padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}
+</style>
+</head>
+<body style="background-image: url('background.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;">
+<h1 align="center" style="font-family: Copperplate, Papyrus, fantasy;"><b>THRILLOPHILIA</b></h1>
+<marquee bgcolor="Lavender" direction="left"><p style="color:Charcoal">SEASONAL SPECIALS:LAMBASINGI,MANALI</p></marquee>
+<p> </p>
+
+<div class="sidebar">
+  <a href="main.html"> Home</a>
+  <a href="facilities.html">Facilities</a>
+  <a href="resorts.html">Resorts</a>
+  <a href="#booking">Booking</a>
+  <a href="contact.html">Contact</a>
+</div>
+<div class="main">
+
+<form name="resort" method="post" action="success.html" id="bookingForm">
+ <div class="timer" id="timer"></div> <!-- Timer div added here -->
+<table bgcolor="lavender" align="center" cellspacing="10">
+<th colspan="3" style="text-align:center; color: maroon;"><h3>...BOOKING FORM...</h3></th>
+<tr>
+<td><b>NAME</b></td>
+<td align="center"><b>  :  </b></td>
+<td><input type="text" name="name"></td>
+</tr>
+<tr>
+<td><b>EMAIL ID</b></td>
+<td align="center"><b>  :  </b></td>
+<td><input type="email" name="email" ></td>
+</tr>
+<tr>
+<td><b>AADHAR NUMBER</b></td>
+<td align="center"><b>  :  </b></td>
+<td><input type="text" id="aadhar" name="aadhar" maxlength="12"></td>
+</tr>
+<tr>
+<td><b>SELECT HILL STATION</b></td>
+<td align="center"><b>  :  </b></td>
+<td>
+<select name="hillstation" multiple>
+<option value="1">GANGTOK</option>
+<option value="2">DARJEELING</option>
+<option value="3">OOTY</option>
+<option value="4">SHILLONG</option>
+<option value="5">LAMBASINGI</option>
+<option value="6">MANALI</option>
+<option value="7">MUNNAR</option>
+<option value="8">KOORG</option>
+</select>
+</td>
+</tr>
+<tr>
+<td><b>SELECT RESORT TYPE</b></td>
+<td align="center"><b>  :  </b></td>
+<td>
+<select name="resorttype" multiple>
+<option value="1">1bhk flat</option>
+<option value="2">2bhk flat</option>
+<option value="3">a villa without pool</option>
+<option value="4">a villa with pool</option>
+<option value="5">others</option>
+</select>
+</td>
+</tr>
+<tr>
+<td><b>MOBILE NUMBER</b></td>
+<td align="center"><b>  :  </b></td>
+<td><input type="text" maxlength="10" name="number" ></td>
+</tr>
+<tr>
+<td><b>ALTERNATE MOBILE NUMBER</b></td>
+<td align="center"><b>  :  </b></td>
+<td><input type="text" maxlength="10" name="altnumber"></td>
+</tr>
+<tr>
+<td><b>PERMANENT ADDRESS</b></td>
+<td align="center"><b>  :  </b></td>
+<td><input type="text" name="address"></td>
+</tr>
+<tr>
+<td><b>NO OF PERSONS</b></td>
+<td align="center"><b>  :  </b></td>
+<td><input type="text" name="num"></td>
+</tr>
+<tr>
+<td> </td>
+<td align="center">
+  <input type="submit" value="BOOK NOW" style="background-color:green;">
+</td>
+</tr>
+</table>
+</form>
+
+<!-- Additional buttons for modify and book -->
+<div id="confirmButtons" style="text-align: center; display: none;">
+  <button id="modifyButton">Modify</button>
+  <button id="confirmBookButton">Confirm Booking</button>
+</div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+<script>
+var countdown = 250; // 90 seconds
+
+// Function to update countdown timer
+function updateTimer() {
+  document.getElementById("timer").innerHTML = "Time left: " + countdown + " seconds";
+  countdown--;
+  if (countdown < 0) {
+    clearInterval(timerInterval);
+    displayAlertAndReset();
+  }
+}
+
+// Function to display alert and reset page
+function displayAlertAndReset() {
+  alert("Your session is about to expire. Click OK to reset.");
+  window.location.reload();
+}
+
+// Set interval to update timer every second
+var timerInterval = setInterval(function() {
+  updateTimer();
+}, 1000); // 1000 milliseconds = 1 second
+angular.module('bookingApp', [])
+  .controller('BookingController', function($scope) {
+    $scope.isLocked = false;
+
+    $scope.lockInputs = function() {
+      $scope.isLocked = true;
+    };
+
+    $scope.unlockInputs = function() {
+      $scope.isLocked = false;
+    };
+
+    
+  });
+
+document.getElementById('bookingForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  var form = document.getElementById('bookingForm');
+  var inputs = form.querySelectorAll('input, select');
+  inputs.forEach(function(input) {
+    input.disabled = true;
+  });
+  document.getElementById('confirmButtons').style.display = 'block';
+document.querySelector('input[type="submit"]').style.display = 'none';
+
+});
+
+document.getElementById('modifyButton').addEventListener('click', function() {
+  var form = document.getElementById('bookingForm');
+  var inputs = form.querySelectorAll('input, select');
+  inputs.forEach(function(input) {
+    input.disabled = false;
+  });
+  document.getElementById('confirmButtons').style.display = 'none';
+document.querySelector('input[type="submit"]').style.display = 'block';
+});
+
+document.getElementById('confirmBookButton').addEventListener('click', function() {
+alert('Booking is successful!');
+  location.reload();
+
+});
+</script>
+</body>
+</html>
